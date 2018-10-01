@@ -15,7 +15,7 @@ class fwrapper:
         self.childcount = childcount
         self.name = name
 class node:
-    def __self__(self, fw, children):
+    def __init__(self, fw, children):
         self.function = fw.function
         self.name = fw.name
         self.children = children
@@ -36,38 +36,34 @@ class constnode:
     def evaluate(self, inp):
         return self.v
 
-addw = fwrapper(lambda l:l[0]+l[1], 2, 'add')
-subw = fwrapper(lambda l:l[0]-l[1], 2, 'subtract')
-mulw = fwrapper(lambda l:l[0]*l[1], 2, 'multiply')
 
-# step 1: We create a function
-def iffunc(l):
-    if l[0] > 0:
-        return l[1]
-    else:
-        return l[2]
-
-# step 2: We initialise an object fwrapper which takes the function, the number of arguments and the name
-ifw = fwrapper(iffunc, 3, 'if')
-
-def isgreater(l):
-    if l[0] > l[1]:
-        return 1
-    else:
-        return 0
-gtw = fwrapper(isgreater, 2, 'isgreater')
-
-# step 3: We create a new function example, and return a node with the if function as parent
-def exampletree():
-    #If has 3 arguments, i.e. 3 child nodes which are themselves nodes
-    return node(ifw, [
-#The first if case we check to see if a value is greater than the constant 3
-                        node(gtw, [paramnode(0), constnode(3)]),
-#If the above statement is true, then we add 5 to the value
-                        node(addw [paramnode(1), constnode(5)]),
-#Else we subtract 2 from the value
-                        node(subw [paramnode(2, constnode(2))]),
-                    ]
-                )
-
-flist = [addw, subw, mulw, ifw, gtw]
+# addw = fwrapper(lambda l:l[0]+l[1],2,'add')
+# subw = fwrapper(lambda l:l[0]-l[1],2,'subtract')
+# mulw = fwrapper(lambda l:l[0]*l[1],2,'multiply')
+#
+#
+# def iffunc(l):
+#     if l[0]>0:
+#         return l[1]
+#     else:
+#         return l[2]
+#
+#
+# ifw = fwrapper(iffunc, 3, 'if')
+# def isgreater(l):
+#     if l[0]>l[1]:
+#         return 1
+#     else:
+#         return 0
+#
+#
+# gtw=fwrapper(isgreater, 2, 'isgreater')
+# flist=[addw, mulw, ifw, gtw, subw]
+#
+# def exampletree():
+#     return node(ifw,[
+#                     node(gtw,[paramnode(0),constnode(3)]),
+#                     node(addw,[paramnode(1),constnode(5)]),
+#                     node(subw,[paramnode(1),constnode(2)]),
+#                     ]
+#                 )
