@@ -50,6 +50,9 @@ def exampletree():
                 )
 
 
+def hiddenfunction(x, y):
+    return x**2+2*y+3*x+5
+
 test_tree = makerandomtree(1)
 print (test_tree.evaluate([2, 1]))
 # print (test_tree.evaluate([2, 4]))
