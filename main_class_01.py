@@ -1,8 +1,8 @@
 '''Main class for executing'''
-import tree_01
 from random import randint, random, choice
 from copy import deepcopy
 from math import log
+import tree_01
 
 addw = tree_01.fwrapper(lambda l:l[0]+l[1],2,'add')
 subw = tree_01.fwrapper(lambda l: l[0] - l[1], 2, 'subtract')
@@ -35,6 +35,8 @@ def exampletree():
                     ]
                 )
 
+
 exampletree_test = exampletree()
-print (exampletree_test.evaluate([2, 3]))
-print (exampletree_test.evaluate([5, 3]))
+exampletree_test.evaluate([2, 3])
+exampletree_test.evaluate([5, 3])
+exampletree_test.display()
