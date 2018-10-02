@@ -27,6 +27,20 @@ def isgreater(l):
 gtw = tree_01.fwrapper(isgreater, 2, 'isgreater')
 flist=[addw, mulw, ifw, gtw, subw]
 
+
+def makerandomtree(pc, maxdepth = 4, fpr = 0.5, ppr = 0.6):
+    if random() < fpr and maxdepth > 0:
+        f = choice(flist)
+        # print(str(f))
+        children = [makerandomtree(pc, maxdepth-1, fpr, ppr)
+                    for i in range(f.childcount)]
+        return tree_01.node(f, children)
+    elif random() < ppr:
+        return tree_01.paramnode(randint(0, pc-1))
+    else:
+        return tree_01.constnode(randint(0, 10))
+
+
 def exampletree():
     return tree_01.node(ifw,[
         tree_01.node(gtw,[tree_01.paramnode(0),tree_01.constnode(3)]),
@@ -36,7 +50,17 @@ def exampletree():
                 )
 
 
-exampletree_test = exampletree()
-exampletree_test.evaluate([2, 3])
-exampletree_test.evaluate([5, 3])
-exampletree_test.display()
+test_tree = makerandomtree(1)
+print (test_tree.evaluate([2, 1]))
+# print (test_tree.evaluate([2, 4]))
+# print (test_tree.evaluate([5, 3]))
+test_tree_02 = makerandomtree(2)
+print (test_tree_02.evaluate([5, 3]))
+# print (test_tree_02.evaluate([5, 20]))
+test_tree.display()
+print("-----")
+test_tree_02.display()
+# exampletree_test = exampletree()
+# exampletree_test.evaluate([2, 3])
+# exampletree_test.evaluate([5, 3])
+# exampletree_test.display()
