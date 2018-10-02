@@ -42,6 +42,7 @@ def makerandomtree(pc, maxdepth = 4, fpr = 0.5, ppr = 0.6):
 
 
 def exampletree():
+    #A tree with 3 nodes and 4 functions, root is IF statement
     return tree_01.node(ifw,[
         tree_01.node(gtw,[tree_01.paramnode(0),tree_01.constnode(3)]),
         tree_01.node(addw,[tree_01.paramnode(1),tree_01.constnode(5)]),
@@ -53,17 +54,30 @@ def exampletree():
 def hiddenfunction(x, y):
     return x**2+2*y+3*x+5
 
+
+def buildhiddenset():
+    rows = [] #Empty list
+    for i in range(200):
+        x = randint(0, 40) #x is a random integer between 0 and 40
+         #200 iterations
+        y = randint(0, 40) #y is a random integer between 0 and 40
+        rows.append([x, y, hiddenfunction(x, y)])
+    return rows
+
+
+def scorefunction(tree, s):
+    dif = 0
+    for data in buildhiddenset():
+        v = tree.evaluate([data[0], data[1]])
+        dif += abs(v - data[2])
+    return dif
+
+
+# hiddenset = buildhiddenset #Build our hiddenset
 test_tree = makerandomtree(1)
 print (test_tree.evaluate([2, 1]))
-# print (test_tree.evaluate([2, 4]))
-# print (test_tree.evaluate([5, 3]))
 test_tree_02 = makerandomtree(2)
 print (test_tree_02.evaluate([5, 3]))
-# print (test_tree_02.evaluate([5, 20]))
 test_tree.display()
-print("-----")
 test_tree_02.display()
-# exampletree_test = exampletree()
-# exampletree_test.evaluate([2, 3])
-# exampletree_test.evaluate([5, 3])
-# exampletree_test.display()
+print(scorefunction(test_tree, buildhiddenset()))
