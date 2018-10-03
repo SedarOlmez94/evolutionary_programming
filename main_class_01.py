@@ -98,4 +98,5 @@ print(mutation_tree_01.display())
 
 # Note: if our scorefunction returns 0 then our program is absolutely correct, this is an extremely rare outcome.
 print("Result for test_tree_01: " + str(scorefunction(test_tree, buildhiddenset())))
+print("Result for mutation_tree_01: " + str(scorefunction(mutation_tree_01, buildhiddenset())))
 # print("Result for test_tree_02: " + str(scorefunction(test_tree_02, buildhiddenset())))
