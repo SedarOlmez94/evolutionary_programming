@@ -72,12 +72,30 @@ def scorefunction(tree, s):
         dif += abs(v - data[2])
     return dif
 
+'''We check to see if the root is to be mutated, if not then we traverse
+    to the children nodes and try again. Either: a node will be mutated, no node
+    will be mutated from top to bottom or some nodes will be mutated. this
+    all depends on the random() functions output.'''
+def mutate(t, pc, probchange=0.1):
+    if random() < probchange:
+        return makerandomtree(pc)
+    else:
+        result = deepcopy(t)
+        if isinstance(t, tree_01.node):
+            result.children = [mutate(c, pc, probchange) for c in t.children]
+        return result
+
 
 test_tree = makerandomtree(1)
 print (test_tree.evaluate([2, 1]))
-test_tree_02 = makerandomtree(2)
-print (test_tree_02.evaluate([5, 3]))
+# test_tree_02 = makerandomtree(2)
+# print (test_tree_02.evaluate([5, 3]))
 test_tree.display()
-test_tree_02.display()
-print(scorefunction(test_tree, buildhiddenset()))
-print(scorefunction(test_tree_02, buildhiddenset()))
+# test_tree_02.display()
+mutation_tree_01 = mutate(test_tree, 2)
+print("---")
+print(mutation_tree_01.display())
+
+# Note: if our scorefunction returns 0 then our program is absolutely correct, this is an extremely rare outcome.
+print("Result for test_tree_01: " + str(scorefunction(test_tree, buildhiddenset())))
+# print("Result for test_tree_02: " + str(scorefunction(test_tree_02, buildhiddenset())))
