@@ -72,6 +72,7 @@ def scorefunction(tree, s):
         dif += abs(v - data[2])
     return dif
 
+
 '''We check to see if the root is to be mutated, if not then we traverse
     to the children nodes and try again. Either: a node will be mutated, no node
     will be mutated from top to bottom or some nodes will be mutated. this
@@ -85,18 +86,62 @@ def mutate(t, pc, probchange=0.1):
             result.children = [mutate(c, pc, probchange) for c in t.children]
         return result
 
+'''The crossover function takes in two trees, given a probability if satisfied
+    a new tree called result is produced which is a copy of the first tree but
+    with the children of tree 2 added to it, so we create a hybrid tree.'''
+def crossover(t1, t2, probswap = 0.7, top = 1):
+    if random() < probswap and not top:
+        return deepcopy(t2)
+    else:
+        result = deepcopy(t1)
+        if isinstance(t1, tree_01.node) and isinstance(t2, tree_01.node):
+            result.children = [crossover(c, choice(t2.children), probswap, 0) for
+            c in t1.children]
+        return result
 
-test_tree = makerandomtree(1)
-print (test_tree.evaluate([2, 1]))
-# test_tree_02 = makerandomtree(2)
-# print (test_tree_02.evaluate([5, 3]))
-test_tree.display()
-# test_tree_02.display()
-mutation_tree_01 = mutate(test_tree, 2)
+
+'''Building the environment'''
+def evolve(pc, popsize, rankfunction, maxgen = 500, mutation_rate = 0.1,
+    breeding_rate = 0.4, pexp = 0.7, pnew = 0.05):
+
+
+    def selectindex():
+        return int(log(random())/log(pexp))
+
+
+    population = [makerandomtree(pc) for i in range(popsize)]
+    for i in range(maxgen):
+        scores = rankfunction(population)
+        print (scores[0][0])
+        if scores[0][0] == 0: break
+        newpop = [scores[0][1], scores[1][1]]
+        while len(newpop) < popsize:
+            if random() > pnew:
+                newpop.append(mutate(crossover(scores[selectindex()][1],
+                                                scores[selectindex()][1],
+                                                probswap = breeding_rate),
+                                                pc, probchange = mutation_rate))
+            else:
+                newpop.append(makerandomtree(pc))
+        population = newpop
+        scores[0][1].display()
+        return scores[0][1]
+
+
+test_tree = makerandomtree(2)
+test_tree.evaluate([2, 1])
+test_tree_02 = makerandomtree(2)
+test_tree_02.evaluate([5, 3])
+print (test_tree.display())
+print (test_tree_02.display())
+
+cross = crossover(test_tree, test_tree_02)
+# mutation_tree_01 = mutate(test_tree, 2)
 print("---")
-print(mutation_tree_01.display())
+# print(mutation_tree_01.display())
+print (cross.display())
 
 # Note: if our scorefunction returns 0 then our program is absolutely correct, this is an extremely rare outcome.
-print("Result for test_tree_01: " + str(scorefunction(test_tree, buildhiddenset())))
-print("Result for mutation_tree_01: " + str(scorefunction(mutation_tree_01, buildhiddenset())))
+# print("Result for test_tree_01: " + str(scorefunction(test_tree, buildhiddenset())))
+# print("Result for mutation_tree_01: " + str(scorefunction(mutation_tree_01, buildhiddenset())))
 # print("Result for test_tree_02: " + str(scorefunction(test_tree_02, buildhiddenset())))
