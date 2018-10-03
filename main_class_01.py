@@ -113,7 +113,8 @@ def evolve(pc, popsize, rankfunction, maxgen = 500, mutation_rate = 0.1,
     for i in range(maxgen):
         scores = rankfunction(population)
         print (scores[0][0])
-        if scores[0][0] == 0: break
+        if scores[0][0] == 0:
+            break
         newpop = [scores[0][1], scores[1][1]]
         while len(newpop) < popsize:
             if random() > pnew:
@@ -131,23 +132,36 @@ def evolve(pc, popsize, rankfunction, maxgen = 500, mutation_rate = 0.1,
 def getrankfunction(dataset):
     def rankfunction(population):
         scores = [(scorefunction(t, dataset), t) for t in population]
-        scores.sort()
+        #scores.sort()
         return scores
     return rankfunction
+
+
+print("Test tree 1")
 test_tree = makerandomtree(2)
 test_tree.evaluate([2, 1])
+print (test_tree.display())
+print("Test tree 2")
 test_tree_02 = makerandomtree(2)
 test_tree_02.evaluate([5, 3])
-print (test_tree.display())
 print (test_tree_02.display())
 
+
+print("Mutated tree 2")
+mutated_tree_02 = mutate(test_tree_02, 2)
+print(mutated_tree_02.display())
+
+
+print("Crossover of tree 1 and tree 2")
 cross = crossover(test_tree, test_tree_02)
-# mutation_tree_01 = mutate(test_tree, 2)
-print("---")
-# print(mutation_tree_01.display())
 print (cross.display())
 
+
 # Note: if our scorefunction returns 0 then our program is absolutely correct, this is an extremely rare outcome.
-# print("Result for test_tree_01: " + str(scorefunction(test_tree, buildhiddenset())))
-# print("Result for mutation_tree_01: " + str(scorefunction(mutation_tree_01, buildhiddenset())))
-# print("Result for test_tree_02: " + str(scorefunction(test_tree_02, buildhiddenset())))
+print("Result for test_tree_01: " + str(scorefunction(test_tree, buildhiddenset())))
+print("Result for test_tree_02: " + str(scorefunction(test_tree_02, buildhiddenset())))
+
+
+print("Evolved tree:")
+rf = getrankfunction(buildhiddenset)
+evolve(2, 500, rf, mutation_rate = 0.2, breeding_rate = 0.1, pexp = 0.7, pnew = 0.1)
