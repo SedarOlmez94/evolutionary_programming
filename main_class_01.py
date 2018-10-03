@@ -73,7 +73,6 @@ def scorefunction(tree, s):
     return dif
 
 
-# hiddenset = buildhiddenset #Build our hiddenset
 test_tree = makerandomtree(1)
 print (test_tree.evaluate([2, 1]))
 test_tree_02 = makerandomtree(2)
@@ -81,3 +80,4 @@ print (test_tree_02.evaluate([5, 3]))
 test_tree.display()
 test_tree_02.display()
 print(scorefunction(test_tree, buildhiddenset()))
+print(scorefunction(test_tree_02, buildhiddenset()))
