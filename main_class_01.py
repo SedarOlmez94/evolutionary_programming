@@ -132,10 +132,57 @@ def evolve(pc, popsize, rankfunction, maxgen = 500, mutation_rate = 0.1,
 def getrankfunction(dataset):
     def rankfunction(population):
         scores = [(scorefunction(t, dataset), t) for t in population]
-        #scores.sort()
         return scores
     return rankfunction
 
+'''A mini grid game, of a 3 by 3 plane, each player can move in one of four directions
+    but is constrained from moving outside the plane, if it does then it loses a point
+    to win a game player A must enter the square player B currently occupies or vice versa
+    both players a random trees of makerandomtree(i) where i is the depth we want our tree
+    to have. The output of the game can be of any 3 outcomes, these are 1, 0 or -1
+    if 0 -> player A won, 1 -> player B won or -1 -> tie.'''
+def gridgame(p):
+    #board size
+    max = (3, 3)
+
+    #Remember the last move for each player
+    lastmove=[-1, -1]
+
+    #Remember the player's locations
+    location = [[randint(0, max[0]), randint(0, max[1])]]
+
+    #Put the second player a sufficient distance from the first
+    location.append([(location[0][0] + 2) % 4, (location[0][1] + 2) % 4])
+
+    #Maximum of 50 moves before a tie
+    for o in range(50):
+
+        #For each player
+        for i in range(2):
+            locs = location[i][:] + location[1-i][:]
+            locs.append(lastmove[i])
+            move = p[i].evaluate(locs) % 4
+
+            #You lose if you mnove the same direction twice in a row
+            if lastmove[i] == move: return 1 - i
+            lastmove[i] = move
+            if move == 0:
+                location[i][0] -= 1
+                #Board limits
+                if location[i][0] < 0: location[i][0] = 0
+            if move == 1:
+                location[i][0] += 1
+                if location[i][0] > max[0]: location[i][0] = max[0]
+            if move == 2:
+                location[i][1] -= 1
+                if location[i][1] < 0: location[i][1] = 0
+            if move == 3:
+                location[i][1] += 1
+                if location[i][1] > max[1]: location[i][1] = max[1]
+
+            #If you have captured the other player, you win
+            if location[i] == location[1-i]: return i
+    return -1
 
 print("Test tree 1")
 test_tree = makerandomtree(2)
@@ -165,3 +212,8 @@ print("Result for test_tree_02: " + str(scorefunction(test_tree_02, buildhiddens
 print("Evolved tree:")
 rf = getrankfunction(buildhiddenset)
 evolve(2, 500, rf, mutation_rate = 0.2, breeding_rate = 0.1, pexp = 0.7, pnew = 0.1)
+
+print("Competitive grid game between players 1 and 2, two random programs with depth 5")
+player_1 = makerandomtree(5)
+player_2 = makerandomtree(5)
+print(gridgame([player_1, player_2]))
