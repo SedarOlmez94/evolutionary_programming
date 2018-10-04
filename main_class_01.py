@@ -1,7 +1,6 @@
 '''Main class for executing'''
 from random import randint, random, choice
 from copy import deepcopy
-from importlib import reload
 from math import log
 import tree_01
 
@@ -20,18 +19,18 @@ class humanplayer:
         for i in range(4):
             for j in range(4):
                 if (i, j) == me:
-                    print ('0', end="")
+                    print('0', end="")
                 elif (i, j) in others:
-                    print ('X', end="")
+                    print('X', end="")
                 else:
-                    print ('.', end="")
+                    print('.', end="")
             print("")
         #Show moves, for reference
-        print ('Your last move was %d' % board[len(board)-1])
-        print (' 0')
-        print ('2 3')
-        print (' 1')
-        print ('Enter move: ', end="")
+        print('Your last move was %d' % board[len(board)-1])
+        print(' 0')
+        print('2 3')
+        print(' 1')
+        print('Enter move: ', end="")
 
         #Return whatever the user enters
         move = int(input())
