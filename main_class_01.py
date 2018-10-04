@@ -31,7 +31,6 @@ flist=[addw, mulw, ifw, gtw, subw]
 def makerandomtree(pc, maxdepth = 4, fpr = 0.5, ppr = 0.6):
     if random() < fpr and maxdepth > 0:
         f = choice(flist)
-        # print(str(f))
         children = [makerandomtree(pc, maxdepth-1, fpr, ppr)
                     for i in range(f.childcount)]
         return tree_01.node(f, children)
@@ -135,6 +134,7 @@ def getrankfunction(dataset):
         return scores
     return rankfunction
 
+
 '''A mini grid game, of a 3 by 3 plane, each player can move in one of four directions
     but is constrained from moving outside the plane, if it does then it loses a point
     to win a game player A must enter the square player B currently occupies or vice versa
@@ -184,6 +184,35 @@ def gridgame(p):
             if location[i] == location[1-i]: return i
     return -1
 
+
+def tournament(pl):
+    #count losses
+    losses = [0 for p in pl]
+
+    #Every player plays every other player
+    for i in range(len(pl)):
+        for j in range(len(pl)):
+            if i == j:
+                continue
+
+            #Who is the winner?
+            winner = gridgame([pl[i], pl[j]])
+            #Two points for a loss, one point for a tie
+            if winner == 0:
+                losses[j] += 2
+            elif winner == 1:
+                losses[i] += 2
+            elif winner == -1:
+                losses[i] += 1
+                losses[i] += 1
+                pass
+
+    #sort and return the results
+    z = list(zip(losses, pl))
+    for i in range(len(z)):
+        print(z[i])
+    return z
+
 print("Test tree 1")
 test_tree = makerandomtree(2)
 test_tree.evaluate([2, 1])
@@ -211,9 +240,11 @@ print("Result for test_tree_02: " + str(scorefunction(test_tree_02, buildhiddens
 
 print("Evolved tree:")
 rf = getrankfunction(buildhiddenset)
-evolve(2, 500, rf, mutation_rate = 0.2, breeding_rate = 0.1, pexp = 0.7, pnew = 0.1)
-
+x = evolve(2, 500, rf, mutation_rate = 0.2, breeding_rate = 0.1, pexp = 0.7, pnew = 0.1)
+x
 print("Competitive grid game between players 1 and 2, two random programs with depth 5")
 player_1 = makerandomtree(5)
 player_2 = makerandomtree(5)
 print(gridgame([player_1, player_2]))
+print("Tournament:")
+winner = evolve(5, 100, tournament, maxgen = 50)
