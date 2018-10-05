@@ -12,6 +12,7 @@ mulw = tree_01.fwrapper(lambda l:l[0]*l[1],2,'multiply')
 
 class humanplayer:
     def evaluate(self, board):
+
         # Get my location and the location of the other player
         me = tuple(board[0:2])
         others = [tuple(board[x:x+2]) for x in range(2, len(board)-1, 2)]
@@ -164,7 +165,7 @@ def getrankfunction(dataset):
     return rankfunction
 
 
-'''A mini grid game, of a 3 by 3 plane, each player can move in one of four directions
+'''A mini grid game, of a 4 by 4 plane, each player can move in one of four directions
     but is constrained from moving outside the plane, if it does then it loses a point
     to win a game player A must enter the square player B currently occupies or vice versa
     both players a random trees of makerandomtree(i) where i is the depth we want our tree
@@ -184,7 +185,7 @@ def gridgame(p):
     location.append([(location[0][0] + 2) % 4, (location[0][1] + 2) % 4])
 
     #Maximum of 50 moves before a tie
-    for o in range(50):
+    for o in range(10):
 
         #For each player
         for i in range(2):
@@ -242,41 +243,41 @@ def tournament(pl):
     #     print(z[i])
     return z
 
-# print("Test tree 1")
-# test_tree = makerandomtree(2)
-# test_tree.evaluate([2, 1])
-# print (test_tree.display())
-# print("Test tree 2")
-# test_tree_02 = makerandomtree(2)
-# test_tree_02.evaluate([5, 3])
-# print (test_tree_02.display())
-#
-#
-# print("Mutated tree 2")
-# mutated_tree_02 = mutate(test_tree_02, 2)
-# print(mutated_tree_02.display())
-#
-#
-# print("Crossover of tree 1 and tree 2")
-# cross = crossover(test_tree, test_tree_02)
-# print (cross.display())
-#
-#
-# # Note: if our scorefunction returns 0 then our program is absolutely correct, this is an extremely rare outcome.
-# print("Result for test_tree_01: " + str(scorefunction(test_tree, buildhiddenset())))
-# print("Result for test_tree_02: " + str(scorefunction(test_tree_02, buildhiddenset())))
-#
-#
-# print("Evolved tree:")
-# rf = getrankfunction(buildhiddenset)
-# x = evolve(2, 500, rf, mutation_rate = 0.2, breeding_rate = 0.1, pexp = 0.7, pnew = 0.1)
-# x
-# print("Competitive grid game between players 1 and 2, two random programs with depth 5")
-# player_1 = makerandomtree(5)
-# player_2 = makerandomtree(5)
-# print(gridgame([player_1, player_2]))
+print("Test tree 1")
+test_tree = makerandomtree(2)
+test_tree.evaluate([2, 1])
+print (test_tree.display())
+print("Test tree 2")
+test_tree_02 = makerandomtree(2)
+test_tree_02.evaluate([5, 3])
+print (test_tree_02.display())
+
+
+print("Mutated tree 2")
+mutated_tree_02 = mutate(test_tree_02, 2)
+print(mutated_tree_02.display())
+
+
+print("Crossover of tree 1 and tree 2")
+cross = crossover(test_tree, test_tree_02)
+print (cross.display())
+
+
+#Note: if our scorefunction returns 0 then our program is absolutely correct, this is an extremely rare outcome.
+print("Result for test_tree_01: " + str(scorefunction(test_tree, buildhiddenset())))
+print("Result for test_tree_02: " + str(scorefunction(test_tree_02, buildhiddenset())))
+
+
+print("Evolved tree:")
+rf = getrankfunction(buildhiddenset)
+x = evolve(2, 500, rf, mutation_rate = 0.2, breeding_rate = 0.1, pexp = 0.7, pnew = 0.1)
+x
+print("Competitive grid game between players 1 and 2, two random programs with depth 5")
+player_1 = makerandomtree(5)
+player_2 = makerandomtree(5)
+print(gridgame([player_1, player_2]))
+
 print("Tournament:")
-winner = evolve(5, 500, tournament, maxgen = 50)
 
-
+winner = evolve(5, 100, tournament, maxgen=50)
 gridgame([winner, humanplayer()])
