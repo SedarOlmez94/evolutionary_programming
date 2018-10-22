@@ -10,35 +10,6 @@ subw = tree_01.fwrapper(lambda l: l[0] - l[1], 2, 'subtract')
 mulw = tree_01.fwrapper(lambda l:l[0]*l[1],2,'multiply')
 
 
-class humanplayer:
-    def evaluate(self, board):
-
-        # Get my location and the location of the other player
-        me = tuple(board[0:2])
-        others = [tuple(board[x:x+2]) for x in range(2, len(board)-1, 2)]
-
-        #Display the Board
-        for i in range(4):
-            for j in range(4):
-                if (i, j) == me:
-                    print ('0', end="")
-                elif (i, j) in others:
-                    print ('X', end="")
-                else:
-                    print ('.', end="")
-            print("")
-        #Show moves, for reference
-        print ('Your last move was %d' % board[len(board)-1])
-        print (' 0')
-        print ('2 3')
-        print (' 1')
-        print ('Enter move: ', end="")
-
-        #Return whatever the user enters
-        move = int(input())
-        return move
-
-
 def iffunc(l):
     if l[0]>0:
         return l[1]
@@ -106,7 +77,7 @@ def scorefunction(tree, s):
     to the children nodes and try again. Either: a node will be mutated, no node
     will be mutated from top to bottom or some nodes will be mutated. this
     all depends on the random() functions output.'''
-def mutate(t, pc, probchange=0.1):
+def mutate(t, pc, probchange=0.5):
     if random() < probchange:
         return makerandomtree(pc)
     else:
@@ -139,9 +110,11 @@ def evolve(pc, popsize, rankfunction, maxgen = 500, mutation_rate = 0.1,
 
 
     population = [makerandomtree(pc) for i in range(popsize)]
+
+
     for i in range(maxgen):
         scores = rankfunction(population)
-        #print (scores[0][0])
+        print(scores[0][0])
         if scores[0][0] == 0:
             break
         newpop = [scores[0][1], scores[1][1]]
@@ -159,9 +132,15 @@ def evolve(pc, popsize, rankfunction, maxgen = 500, mutation_rate = 0.1,
 
 
 def getrankfunction(dataset):
+
+
     def rankfunction(population):
+
+
         scores = [(scorefunction(t, dataset), t) for t in population]
         return scores
+
+
     return rankfunction
 
 
@@ -185,7 +164,7 @@ def gridgame(p):
     location.append([(location[0][0] + 2) % 4, (location[0][1] + 2) % 4])
 
     #Maximum of 50 moves before a tie
-    for o in range(10):
+    for o in range(50):
 
         #For each player
         for i in range(2):
@@ -239,8 +218,8 @@ def tournament(pl):
 
     #sort and return the results
     z = list(zip(losses, pl))
-    # for i in range(len(z)):
-    #     print(z[i])
+    for i in range(len(z)):
+        print(z[i])
     return z
 
 print("Test tree 1")
@@ -275,9 +254,15 @@ x
 print("Competitive grid game between players 1 and 2, two random programs with depth 5")
 player_1 = makerandomtree(5)
 player_2 = makerandomtree(5)
+'''The game will return 0 if player 1 wins, 1 if player 2 wins and finally -1
+    in the event of a tie.'''
 print(gridgame([player_1, player_2]))
 
 print("Tournament:")
 
+''' You lose the game if you:
+        1. Move off the grid or
+        2. Move in the same dirction twice.'''
+
 winner = evolve(5, 100, tournament, maxgen=50)
-gridgame([winner, humanplayer()])
+gridgame([winner, tree_01.humanplayer()])

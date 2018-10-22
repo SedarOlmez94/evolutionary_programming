@@ -35,6 +35,7 @@ class node:
         for c in self.children:
             c.display(indent+1)
 
+
 class paramnode:
     def __init__(self, idx):
         self.idx = idx
@@ -60,3 +61,32 @@ class constnode:
 
     def display(self, indent=0):
         print('%s%d' % (' ' * indent, self.v))
+
+
+class humanplayer:
+    def evaluate(self, board):
+
+        # Get my location and the location of the other player
+        me = tuple(board[0:2])
+        others = [tuple(board[x:x+2]) for x in range(2, len(board)-1, 2)]
+
+        #Display the Board
+        for i in range(4):
+            for j in range(4):
+                if (i, j) == me:
+                    print ('0', end="")
+                elif (i, j) in others:
+                    print ('X', end="")
+                else:
+                    print ('.', end="")
+            print("")
+        #Show moves, for reference
+        print ('Your last move was %d' % board[len(board)-1])
+        print (' 0')
+        print ('2 3')
+        print (' 1')
+        print ('Enter move: ', end="")
+
+        #Return whatever the user enters
+        move = int(input())
+        return move
