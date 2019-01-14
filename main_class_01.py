@@ -1,7 +1,6 @@
 '''Main class for executing'''
 from random import randint, random, choice
 from copy import deepcopy
-from importlib import reload
 from math import log
 import tree_01
 
@@ -9,6 +8,32 @@ addw = tree_01.fwrapper(lambda l:l[0]+l[1],2,'add')
 subw = tree_01.fwrapper(lambda l: l[0] - l[1], 2, 'subtract')
 mulw = tree_01.fwrapper(lambda l:l[0]*l[1],2,'multiply')
 
+class humanplayer:
+    def evaluate(self, board):
+        # Get my location and the location of the other player
+        me = tuple(board[0:2])
+        others = [tuple(board[x:x+2]) for x in range(2, len(board)-1, 2)]
+
+        #Display the Board
+        for i in range(4):
+            for j in range(4):
+                if (i, j) == me:
+                    print('0', end="")
+                elif (i, j) in others:
+                    print('X', end="")
+                else:
+                    print('.', end="")
+            print("")
+        #Show moves, for reference
+        print('Your last move was %d' % board[len(board)-1])
+        print(' 0')
+        print('2 3')
+        print(' 1')
+        print('Enter move: ', end="")
+
+        #Return whatever the user enters
+        move = int(input())
+        return move
 
 def iffunc(l):
     if l[0]>0:
