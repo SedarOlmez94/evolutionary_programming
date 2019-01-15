@@ -8,7 +8,6 @@ addw = tree_01.fwrapper(lambda l:l[0]+l[1],2,'add')
 subw = tree_01.fwrapper(lambda l: l[0] - l[1], 2, 'subtract')
 mulw = tree_01.fwrapper(lambda l:l[0]*l[1],2,'multiply')
 
-
 class humanplayer:
     def evaluate(self, board):
         # Get my location and the location of the other player
@@ -35,7 +34,6 @@ class humanplayer:
         #Return whatever the user enters
         move = int(input())
         return move
-
 
 def iffunc(l):
     if l[0]>0:
@@ -104,7 +102,7 @@ def scorefunction(tree, s):
     to the children nodes and try again. Either: a node will be mutated, no node
     will be mutated from top to bottom or some nodes will be mutated. this
     all depends on the random() functions output.'''
-def mutate(t, pc, probchange=0.1):
+def mutate(t, pc, probchange=0.5):
     if random() < probchange:
         return makerandomtree(pc)
     else:
@@ -137,9 +135,11 @@ def evolve(pc, popsize, rankfunction, maxgen = 500, mutation_rate = 0.1,
 
 
     population = [makerandomtree(pc) for i in range(popsize)]
+
+
     for i in range(maxgen):
         scores = rankfunction(population)
-        #print (scores[0][0])
+        print(scores[0][0])
         if scores[0][0] == 0:
             break
         newpop = [scores[0][1], scores[1][1]]
@@ -157,13 +157,19 @@ def evolve(pc, popsize, rankfunction, maxgen = 500, mutation_rate = 0.1,
 
 
 def getrankfunction(dataset):
+
+
     def rankfunction(population):
+
+
         scores = [(scorefunction(t, dataset), t) for t in population]
         return scores
+
+
     return rankfunction
 
 
-'''A mini grid game, of a 3 by 3 plane, each player can move in one of four directions
+'''A mini grid game, of a 4 by 4 plane, each player can move in one of four directions
     but is constrained from moving outside the plane, if it does then it loses a point
     to win a game player A must enter the square player B currently occupies or vice versa
     both players a random trees of makerandomtree(i) where i is the depth we want our tree
@@ -237,45 +243,51 @@ def tournament(pl):
 
     #sort and return the results
     z = list(zip(losses, pl))
-    # for i in range(len(z)):
-    #     print(z[i])
+    for i in range(len(z)):
+        print(z[i])
     return z
 
-# print("Test tree 1")
-# test_tree = makerandomtree(2)
-# test_tree.evaluate([2, 1])
-# print (test_tree.display())
-# print("Test tree 2")
-# test_tree_02 = makerandomtree(2)
-# test_tree_02.evaluate([5, 3])
-# print (test_tree_02.display())
-#
-#
-# print("Mutated tree 2")
-# mutated_tree_02 = mutate(test_tree_02, 2)
-# print(mutated_tree_02.display())
-#
-#
-# print("Crossover of tree 1 and tree 2")
-# cross = crossover(test_tree, test_tree_02)
-# print (cross.display())
-#
-#
-# # Note: if our scorefunction returns 0 then our program is absolutely correct, this is an extremely rare outcome.
-# print("Result for test_tree_01: " + str(scorefunction(test_tree, buildhiddenset())))
-# print("Result for test_tree_02: " + str(scorefunction(test_tree_02, buildhiddenset())))
-#
-#
-# print("Evolved tree:")
-# rf = getrankfunction(buildhiddenset)
-# x = evolve(2, 500, rf, mutation_rate = 0.2, breeding_rate = 0.1, pexp = 0.7, pnew = 0.1)
-# x
-# print("Competitive grid game between players 1 and 2, two random programs with depth 5")
-# player_1 = makerandomtree(5)
-# player_2 = makerandomtree(5)
-# print(gridgame([player_1, player_2]))
+print("Test tree 1")
+test_tree = makerandomtree(2)
+test_tree.evaluate([2, 1])
+print (test_tree.display())
+print("Test tree 2")
+test_tree_02 = makerandomtree(2)
+test_tree_02.evaluate([5, 3])
+print (test_tree_02.display())
+
+
+print("Mutated tree 2")
+mutated_tree_02 = mutate(test_tree_02, 2)
+print(mutated_tree_02.display())
+
+
+print("Crossover of tree 1 and tree 2")
+cross = crossover(test_tree, test_tree_02)
+print (cross.display())
+
+
+#Note: if our scorefunction returns 0 then our program is absolutely correct, this is an extremely rare outcome.
+print("Result for test_tree_01: " + str(scorefunction(test_tree, buildhiddenset())))
+print("Result for test_tree_02: " + str(scorefunction(test_tree_02, buildhiddenset())))
+
+
+print("Evolved tree:")
+rf = getrankfunction(buildhiddenset)
+x = evolve(2, 500, rf, mutation_rate = 0.2, breeding_rate = 0.1, pexp = 0.7, pnew = 0.1)
+x
+print("Competitive grid game between players 1 and 2, two random programs with depth 5")
+player_1 = makerandomtree(5)
+player_2 = makerandomtree(5)
+'''The game will return 0 if player 1 wins, 1 if player 2 wins and finally -1
+    in the event of a tie.'''
+print(gridgame([player_1, player_2]))
+
 print("Tournament:")
-winner = evolve(5, 500, tournament, maxgen = 50)
 
+''' You lose the game if you:
+        1. Move off the grid or
+        2. Move in the same dirction twice.'''
 
-gridgame([winner, humanplayer()])
+winner = evolve(5, 100, tournament, maxgen=50)
+gridgame([winner, tree_01.humanplayer()])
