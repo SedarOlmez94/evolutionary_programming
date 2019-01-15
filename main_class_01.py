@@ -1,4 +1,4 @@
-'''Main class for executing'''
+'''Main class'''
 from random import randint, random, choice
 from copy import deepcopy
 from math import log
@@ -139,7 +139,7 @@ def evolve(pc, popsize, rankfunction, maxgen = 500, mutation_rate = 0.1,
 
     for i in range(maxgen):
         scores = rankfunction(population)
-        print(scores[0][0])
+        #print(scores[0][0])
         if scores[0][0] == 0:
             break
         newpop = [scores[0][1], scores[1][1]]
@@ -169,7 +169,7 @@ def getrankfunction(dataset):
     return rankfunction
 
 
-'''A mini grid game, of a 4 by 4 plane, each player can move in one of four directions
+'''A mini grid game, of a 4 by 4 plane (1 dimension), each player can move in one of four directions
     but is constrained from moving outside the plane, if it does then it loses a point
     to win a game player A must enter the square player B currently occupies or vice versa
     both players a random trees of makerandomtree(i) where i is the depth we want our tree
@@ -244,7 +244,7 @@ def tournament(pl):
     #sort and return the results
     z = list(zip(losses, pl))
     for i in range(len(z)):
-        print(z[i])
+        #print(z[i])
     return z
 
 print("Test tree 1")
