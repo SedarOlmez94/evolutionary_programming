@@ -1,2 +1,2 @@
 # evolutionary_programming
-This repo is for academic purposes, I am experimenting with evol_programming.
+I developed a 'stupid' agent which learns from the players game strategy and counters moves in very creative ways.
