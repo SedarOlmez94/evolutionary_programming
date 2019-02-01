@@ -1,8 +1,6 @@
 language: python
 python:
   - "2.7"
-script:
-  - ./main_class_01
 notifications:
 email:
   - solmez@turing.ac.uk
